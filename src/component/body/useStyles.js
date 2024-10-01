@@ -22,7 +22,27 @@ function useStyles() {
     },
   }));
 
-  return { StyledDrawer, sidebarItems };
+  const titleStyle = {
+    fontSize: "14px",
+    lineHeight: "20px",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    fontWeight: 500,
+    padding: "1rem 1.2rem 0",
+  };
+
+  const boxStyle = { width: 240, padding: 1 };
+
+  const projectLabelStyle = { px: 2, py: 1, cursor: "pointer" };
+
+  return {
+    StyledDrawer,
+    sidebarItems,
+    titleStyle,
+    boxStyle,
+    projectLabelStyle,
+  };
 }
 
 export { useStyles };

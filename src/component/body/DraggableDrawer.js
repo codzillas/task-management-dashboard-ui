@@ -20,7 +20,13 @@ const DraggableDrawer = ({
   selectedItem,
 }) => {
   const theme = useTheme();
-  const { StyledDrawer, sidebarItems } = useStyles();
+  const {
+    StyledDrawer,
+    sidebarItems,
+    titleStyle,
+    boxStyle,
+    projectLabelStyle,
+  } = useStyles();
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   function getDrawerItem(item) {
@@ -58,26 +64,12 @@ const DraggableDrawer = ({
       }}
       sx={{ zIndex: 19 }}
     >
-      <Box sx={{ width: 240, padding: 1 }} role="presentation">
+      <Box sx={boxStyle} role="presentation">
         <List>{sidebarItems.map((item, index) => getDrawerItem(item))}</List>
-        <Typography
-          sx={{
-            fontSize: "14px",
-            lineHeight: "20px",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            fontWeight: 500,
-            padding: "1rem 1.2rem 0",
-          }}
-        >
-          Projects
-        </Typography>
+        <Typography sx={titleStyle}>Projects</Typography>
         <Box sx={{ py: 1 }}>
           {["project 1", "project 2", "project 3"].map((project) => (
-            <Typography sx={{ px: 2, py: 1, cursor: "pointer" }}>
-              {project}
-            </Typography>
+            <Typography sx={projectLabelStyle}>{project}</Typography>
           ))}
         </Box>
       </Box>

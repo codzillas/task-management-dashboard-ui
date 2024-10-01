@@ -7,7 +7,7 @@ import Register from "./component/auth/Register";
 const PathRouter = () => {
   return (
     <Routes>
-      <Route path="/dashboard" element={<Layout />} />
+      <Route path="/" element={<Layout />} />
       <Route path="/login" element={<Login />} />
       <Route path="/createaccount" element={<Register />} />
     </Routes>
