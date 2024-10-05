@@ -8,8 +8,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchBar from "../searchBar/SearchBar";
 import PopOverButton from "../buttons/PopOverButton";
 import AvatarAction from "../avatarDot/AvatarAction";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchAppBar({ onMenuClick }) {
+  const navigate = useNavigate();
   return (
     <AppBar position="static">
       <Toolbar>
@@ -39,7 +41,15 @@ export default function SearchAppBar({ onMenuClick }) {
               ml: 1,
             }}
           >
-            <Typography variant="h6" noWrap component="div">
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{ cursor: "pointer" }}
+              component="div"
+              onClick={() => {
+                navigate("/");
+              }}
+            >
               Taskey
             </Typography>
           </Box>

@@ -12,9 +12,12 @@ import {
 import React from "react";
 import AvatarDot from "./Avatar";
 import useLogout from "../../hooks/useLogout";
+import { useNavigate } from "react-router-dom";
 
 const AvatarAction = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
+
   const { handleLogout } = useLogout();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -77,10 +80,15 @@ const AvatarAction = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            navigate("/profile");
+            handleClose();
+          }}
+        >
           <Avatar /> Profile
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        {/* <MenuItem onClick={handleClose}>
           <Avatar /> My account
         </MenuItem>
         <Divider />
@@ -89,13 +97,13 @@ const AvatarAction = () => {
             <PersonAdd fontSize="small" />
           </ListItemIcon>
           Add another account
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
+        </MenuItem> */}
+        {/* <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           onClick={() => {
             handleLogout();

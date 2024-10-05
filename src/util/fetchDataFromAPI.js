@@ -1,8 +1,9 @@
 // Define the async function to fetch data
 const fetchDataFromAPI = async (url) => {
+  const token = localStorage.getItem("token");
   try {
     // Perform the API request
-    const response = await fetch(url);
+    const response = await fetch(url, { headers: { Authorization: token } });
     // Check if the response is OK (status code 200-299)
     if (!response.ok) {
       throw new Error(`Error: ${response.status}`);

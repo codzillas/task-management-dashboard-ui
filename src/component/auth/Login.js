@@ -47,6 +47,11 @@ const Login = () => {
     }
   };
 
+  React.useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, [localStorage.getItem("token")]);
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="sm" sx={{ mt: 8 }}>
