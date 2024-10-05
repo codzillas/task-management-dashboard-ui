@@ -1,38 +1,27 @@
 import React, { useState } from "react";
-import { useDrawerState } from "./constants/Constants";
-import DataContainer from "./component/body/DataContainer";
+import { Outlet, useNavigate } from "react-router-dom";
 import SearchAppBar from "./component/appbar/SearchAppBar";
-import DraggableDrawer from "./component/body/DraggableDrawer";
 import { AppContext } from "./context/store";
 
-
-const Layout = () => {
+const Layout = ({ toggleDrawer }) => {
   const [userProjects, setUserProject] = useState([]);
+  const [userTask, setUserTask] = useState([]);
+  const navigate = useNavigate();
 
-  const {
-    isOpen,
-    toggleDrawer,
-    handleDrawerClose,
-    handleItemClick,
-    selectedItem,
-  } = useDrawerState();
-
+  React.useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, [localStorage.getItem("token")]);
   return (
-    <AppContext.Provider value={{ userProjects, setUserProject }}>
+    <AppContext.Provider
+      value={{ userProjects, setUserProject, userTask, setUserTask }}
+    >
       <div
         style={{ display: "flex", flexDirection: "column", height: "100vh" }}
       >
         <SearchAppBar onMenuClick={() => toggleDrawer()} />
-        <div style={{ display: "flex", flexGrow: 1, marginTop: 64 }}>
-          <DraggableDrawer
-            selectedItem={selectedItem}
-            isOpen={isOpen}
-            handleDrawerClose={handleDrawerClose}
-            onItemClick={handleItemClick}
-            toggleDrawer={toggleDrawer}
-          />
-          <DataContainer isOpen={isOpen} selectedItem={selectedItem} />
-        </div>
+        <Outlet />
       </div>
     </AppContext.Provider>
   );
