@@ -12,6 +12,7 @@ import {
 import usePostProject from "../../hooks/useCreateProjects";
 import useGetProjects from "../../hooks/useGetProjects";
 import { AppContext } from "../../context/store";
+import { fetchDecodedToken } from "../../util/commonUtils";
 
 const CreateProjectPopup = ({ toggleModal }) => {
   const [projectName, setProjectName] = useState("");
@@ -23,7 +24,7 @@ const CreateProjectPopup = ({ toggleModal }) => {
   const { setUserProject } = React.useContext(AppContext);
   const { postProject } = usePostProject();
   const { apiData, getProjects } = useGetProjects();
-
+  const decodedToken = fetchDecodedToken();
   React.useEffect(() => {
     if (apiData) {
       setUserProject(apiData);
@@ -38,6 +39,7 @@ const CreateProjectPopup = ({ toggleModal }) => {
       project_status: projectStatus,
       start_date: startDate,
       end_date: endDate,
+      userId: decodedToken.id,
     });
     console.log("response", response);
     if (response?.ok) {

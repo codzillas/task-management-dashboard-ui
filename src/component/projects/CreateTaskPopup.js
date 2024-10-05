@@ -16,10 +16,12 @@ import { AppContext } from "../../context/store";
 
 const CreateTaskPopup = ({ toggleModal }) => {
   const [taskName, setTaskName] = useState("");
+  const [selectedProjectDetails, setSelectedProjectDetails] = React.useState(
+    {}
+  );
   const [taskDetails, setTaskDetails] = useState("");
+  const [taskPriority, setTaskPriority] = useState("");
   const [taskStatus, setTaskStatus] = useState("Pending");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const [alert, setAlert] = useState(null);
   const { setUserTask } = React.useContext(AppContext);
   const { postTask } = usePostTask();
@@ -35,11 +37,11 @@ const CreateTaskPopup = ({ toggleModal }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { response, errMsg } = await postTask({
-      task_name: taskName,
-      task_details: taskDetails,
-      task_status: taskStatus,
-      start_date: startDate,
-      end_date: endDate,
+      name: taskName,
+      details: taskDetails,
+      status: taskStatus,
+      priority: taskPriority,
+      projectDetails: selectedProjectDetails,
     });
     console.log("response", response);
     if (response?.ok) {
@@ -51,8 +53,6 @@ const CreateTaskPopup = ({ toggleModal }) => {
       setTaskName("");
       setTaskDetails("");
       setTaskStatus("Pending");
-      setStartDate("");
-      setEndDate("");
       setTimeout(() => {
         toggleModal(false);
       }, 1000);
@@ -67,13 +67,23 @@ const CreateTaskPopup = ({ toggleModal }) => {
     }, 2000);
   };
 
+  const handleProjectSelection = (newValue) => {
+    console.log(newValue);
+    setSelectedProjectDetails(newValue);
+    // setSelectedProjectName();
+  };
   return (
     <Box sx={{ padding: 2 }}>
       {alert && <Alert severity={alert.severity}>{alert.message}</Alert>}
       <form onSubmit={handleSubmit}>
         <Autocomplete
+          value={selectedProjectDetails.project_name}
+          onChange={(event, newValue) => {
+            handleProjectSelection(newValue);
+          }}
           disablePortal
-          options={userProjects.map((p) => p.project_name)}
+          options={userProjects} // Change this to userProjects to access the full object
+          getOptionLabel={(option) => option.project_name} //
           sx={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="Projects" />}
         />
@@ -125,8 +135,8 @@ const CreateTaskPopup = ({ toggleModal }) => {
           <InputLabel id="task-status-label">Task Status</InputLabel>
           <Select
             labelId="task-status-label"
-            value={taskStatus}
-            onChange={(e) => setTaskStatus(e.target.value)}
+            value={taskPriority}
+            onChange={(e) => setTaskPriority(e.target.value)}
             label="Task Priority"
             required
           >
@@ -135,38 +145,7 @@ const CreateTaskPopup = ({ toggleModal }) => {
             <MenuItem value="Medium">Medium</MenuItem>
           </Select>
         </FormControl>
-        <Box>
-          <TextField
-            fullWidth
-            // label="Start Date"
-            variant="outlined"
-            type="date"
-            value={startDate}
-            sx={{ m: 2 }}
-            onChange={(e) => setStartDate(e.target.value)}
-            required
-            slotProps={{
-              input: {
-                "aria-label": "Start Date",
-              },
-            }}
-          />
-          <TextField
-            fullWidth
-            // label="End Date"
-            variant="outlined"
-            type="date"
-            value={endDate}
-            sx={{ m: 2 }}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-            slotProps={{
-              input: {
-                "aria-label": "End Date",
-              },
-            }}
-          />
-        </Box>
+
         <Button type="submit" variant="contained" color="primary" sx={{ m: 2 }}>
           Create Task
         </Button>

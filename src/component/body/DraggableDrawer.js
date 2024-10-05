@@ -46,7 +46,7 @@ const DraggableDrawer = ({
   }, []);
 
   React.useEffect(() => {
-    if (projectsList?.length) {
+    if (Array.isArray(projectsList) && projectsList?.length) {
       setUserProject(projectsList);
     }
   }, [projectsList]);
@@ -84,7 +84,7 @@ const DraggableDrawer = ({
       ModalProps={{
         keepMounted: true, // Keep mounted to make it responsive on mobile
       }}
-      sx={{ zIndex: 19 }}
+      sx={{ zIndex: -1 }}
     >
       <Box sx={boxStyle} role="presentation">
         <List>{sidebarItems.map((item, index) => getDrawerItem(item))}</List>

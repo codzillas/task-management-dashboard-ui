@@ -5,9 +5,9 @@ import { drawerItemType } from "../../constants/Constants";
 
 function useStyles() {
   const sidebarItems = [
-    { type: drawerItemType.drawerItem, text: "Home", icon: <MailIcon /> },
-    { type: drawerItemType.drawerItem, text: "My Tasks", icon: <MailIcon /> },
-    { type: drawerItemType.divider },
+    // { type: drawerItemType.drawerItem, text: "Home", icon: <MailIcon /> },
+    // { type: drawerItemType.drawerItem, text: "My Tasks", icon: <MailIcon /> },
+    // { type: drawerItemType.divider },
   ];
   const StyledDrawer = styled(Drawer)(({ theme, isSmallScreen }) => ({
     "& .MuiDrawer-paper": {
