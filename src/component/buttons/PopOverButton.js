@@ -5,33 +5,68 @@ import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { POPOVERCONTENT__HEADER } from "../../constants/Constants";
+import {
+  POPOVERCONTENT__HEADER,
+  useProjectstate,
+} from "../../constants/Constants";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
-import { useMediaQuery } from "@mui/material";
+import { Modal, useMediaQuery } from "@mui/material";
+import CreateProjectPopup from "../projects/CreateProjectPopup";
+import CreateTaskPopup from "../projects/CreateTaskPopup";
 
-export default function PopOverButton() {
-  const [anchorEl, setAnchorEl] = useState(null);
+export default function PopOverButton({
+  variant,
+  color,
+  circleFont,
+  openPopup,
+}) {
+  const { handleClose, setAnchorEl, anchorEl } = useProjectstate();
+  const [isModalOpen, toggleModal] = useState(false);
+  const [describedBy, setDescribedBy] = useState(false);
+  const [modalType, setModalType] = useState(POPOVERCONTENT__HEADER.project);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const handleOptionClick = (option) => {
+    toggleModal(true);
+    if (option === POPOVERCONTENT__HEADER.project) {
+      setModalType(POPOVERCONTENT__HEADER.project);
+    } else if (option === POPOVERCONTENT__HEADER.task) {
+      setModalType(POPOVERCONTENT__HEADER.task);
+    }
+    handleClose();
+  };
 
   const handleClick = (event) => {
+    console.log("handleClick");
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  React.useEffect(() => {
+    const open = Boolean(anchorEl);
+    setDescribedBy(open ? "simple-popover" : "");
+  }, [anchorEl]);
 
   return (
     <div sx={{ marginLeft: 0 }}>
-      {!isSmallScreen && (
+      {isSmallScreen || variant === "small" ? (
+        <IconButton
+          aria-label="create"
+          onClick={(e) => {
+            if (openPopup) {
+              handleOptionClick(POPOVERCONTENT__HEADER.project);
+            } else {
+              handleClick(e);
+            }
+          }}
+          sx={{ color: color ?? "white", p: 0 }}
+        >
+          <AddCircleIcon sx={{ fontSize: circleFont ?? "2.5rem" }} />
+        </IconButton>
+      ) : (
         <Button
           startIcon={<AddCircleIcon />}
-          aria-describedby={id}
+          aria-describedby={describedBy}
           onClick={handleClick}
           variant="text"
           sx={{
@@ -53,22 +88,9 @@ export default function PopOverButton() {
           Create
         </Button>
       )}
-
-      {/* Single icon button for small screens */}
-      {isSmallScreen && (
-        <IconButton
-          aria-label="create"
-          onClick={handleClick}
-          sx={{ color: "white", p: 0 }}
-        >
-          <AddCircleIcon sx={{ fontSize: "2.5rem" }} />
-        </IconButton>
-      )}
-
-      {/* Popover to show the action bar */}
       <Popover
-        id={id}
-        open={open}
+        id={describedBy}
+        open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
@@ -92,6 +114,7 @@ export default function PopOverButton() {
         >
           {Object.values(POPOVERCONTENT__HEADER).map((option, index) => (
             <Box
+              onClick={() => handleOptionClick(option)}
               key={index}
               sx={{
                 display: "flex",
@@ -103,7 +126,6 @@ export default function PopOverButton() {
                   p: 1,
                 },
               }}
-              onClick={handleClose}
             >
               <AddIcon fontSize="small" sx={{ marginRight: 1 }} />
               <Typography>{option}</Typography>
@@ -111,6 +133,40 @@ export default function PopOverButton() {
           ))}
         </Box>
       </Popover>
+      <Modal
+        open={isModalOpen} // Modal open if there's content
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: "white",
+              padding: 3,
+              borderRadius: 2,
+              boxShadow: 24,
+              minWidth: 300,
+            }}
+          >
+            {/* {modalContent} Render the selected component here */}
+            {modalType === POPOVERCONTENT__HEADER.project && (
+              <CreateProjectPopup toggleModal={toggleModal} />
+            )}
+            {modalType === POPOVERCONTENT__HEADER.task && (
+              <CreateTaskPopup toggleModal={toggleModal} />
+            )}
+          </Box>
+        </Box>
+      </Modal>
     </div>
   );
 }

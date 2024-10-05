@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Divider,
   List,
   ListItem,
@@ -8,10 +9,17 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+
 import { useTheme } from "@mui/material/styles";
 import React from "react";
 import { useStyles } from "./useStyles";
 import { drawerItemType } from "../../constants/Constants";
+import useGetProjects from "../../hooks/useGetProjects";
+import fetchDataFromAPI from "../../util/fetchDataFromAPI";
+import { RecentActorsRounded } from "@mui/icons-material";
+import { AppContext } from "../../context/store";
+import PopOverButton from "../buttons/PopOverButton";
 
 const DraggableDrawer = ({
   isOpen,
@@ -29,6 +37,20 @@ const DraggableDrawer = ({
   } = useStyles();
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const { userProjects, setUserProject } = React.useContext(AppContext);
+  const { apiData: projectsList, getProjects } = useGetProjects();
+  console.log("userProjects", userProjects);
+  React.useEffect(() => {
+    getProjects();
+  }, []);
+
+  React.useEffect(() => {
+    if (projectsList?.length) {
+      setUserProject(projectsList);
+    }
+  }, [projectsList]);
+
   function getDrawerItem(item) {
     switch (item.type) {
       case drawerItemType.divider:
@@ -66,10 +88,27 @@ const DraggableDrawer = ({
     >
       <Box sx={boxStyle} role="presentation">
         <List>{sidebarItems.map((item, index) => getDrawerItem(item))}</List>
-        <Typography sx={titleStyle}>Projects</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "0 20px",
+          }}
+        >
+          <Typography sx={titleStyle}>Projects</Typography>
+          <PopOverButton
+            variant="small"
+            color="#1876d2"
+            circleFont="1.5rem"
+            openPopup
+          />
+        </Box>
         <Box sx={{ py: 1 }}>
-          {["project 1", "project 2", "project 3"].map((project) => (
-            <Typography sx={projectLabelStyle}>{project}</Typography>
+          {userProjects?.map((project) => (
+            <Typography sx={projectLabelStyle}>
+              {project.project_name}
+            </Typography>
           ))}
         </Box>
       </Box>

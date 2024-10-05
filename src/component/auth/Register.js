@@ -51,6 +51,7 @@ const Register = () => {
           password: password,
         }),
       });
+      console.log("responseeeeeeee", response);
 
       if (response.ok) {
         const data = await response.json();
