@@ -11,7 +11,7 @@ export const drawerItemType = {
   label: "label",
 };
 
-
+export const drawerWidth = 240;
 
 export const useProjectstate = () => {
   const [isCreatingProject, setIsCreatingProject] = useState(false);

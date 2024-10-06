@@ -22,63 +22,9 @@ import MainContentArea from "../content-area/ContentArea";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AppContext } from "../../../context/store";
 import useGetProjects from "../../../hooks/useGetProjects";
+import { AppBar, DrawerHeader, Main } from "../useMainStyles";
 
 const drawerWidth = 240;
-
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme }) => ({
-    flexGrow: 1,
-    // padding: theme.spacing(3),
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    variants: [
-      {
-        props: ({ open }) => open,
-        style: {
-          transition: theme.transitions.create("margin", {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-          }),
-          marginLeft: 0,
-        },
-      },
-    ],
-  })
-);
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme }) => ({
-  transition: theme.transitions.create(["margin", "width"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: `${drawerWidth}px`,
-        transition: theme.transitions.create(["margin", "width"], {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-      },
-    },
-  ],
-}));
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: "flex-end",
-}));
 
 export default function PersistentDrawer() {
   const { userProjects, setUserProject } = React.useContext(AppContext);
@@ -164,18 +110,6 @@ export default function PersistentDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {/* <Box sx={{ py: 1 }}>
-            {userProjects?.map((project) => (
-              <Typography
-                sx={projectLabelStyle}
-                onClick={() => {
-                  navigate(`/project/${project.project_name}`);
-                }}
-              >
-                {project.project_name}
-              </Typography>
-            ))}
-          </Box> */}
           {userProjects?.map((project, index) => (
             <ListItem key={project.project_name} disablePadding>
               <ListItemButton>
@@ -192,19 +126,6 @@ export default function PersistentDrawer() {
             </ListItem>
           ))}
         </List>
-        {/* <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <Main open={open}>
         <MainContentArea>
