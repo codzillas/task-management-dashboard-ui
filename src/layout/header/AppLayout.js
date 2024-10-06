@@ -6,7 +6,7 @@ import Main from "../Main/Main";
 import SearchAppBar from "./SearchAppBar";
 
 const AppLayout = () => {
-  const [userProjects, setUserProject] = useState([]);
+  const [userProjects, setUserProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState({});
   const [userTask, setUserTask] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
@@ -32,7 +32,7 @@ const AppLayout = () => {
   const appContextValue = React.useMemo(
     () => ({
       userProjects,
-      setUserProject,
+      setUserProjects,
       userTask,
       setUserTask,
       isOpen,
@@ -42,7 +42,7 @@ const AppLayout = () => {
     }),
     [
       userProjects,
-      setUserProject,
+      setUserProjects,
       userTask,
       setUserTask,
       isOpen,
