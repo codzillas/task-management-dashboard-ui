@@ -26,13 +26,9 @@ const Login = () => {
 
     try {
       // API call for login
-      const response = await fetch("http://localhost:5001/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        `http://localhost:5001/api/auth/login?email=${email}&password=${password}`
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -40,7 +36,7 @@ const Login = () => {
         // Store token in localStorage or context (if needed)
         localStorage.setItem("token", data.token);
         // Navigate to home page after successful login
-        navigate("/dashboard"); // Adjust this to your home route
+        navigate("/"); // Adjust this to your home route
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message); // Set the error message to display
@@ -51,6 +47,11 @@ const Login = () => {
     }
   };
 
+  React.useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, [localStorage.getItem("token")]);
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="sm" sx={{ mt: 8 }}>

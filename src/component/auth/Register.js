@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -22,6 +22,13 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, [localStorage.getItem("token")]);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -51,6 +58,7 @@ const Register = () => {
           password: password,
         }),
       });
+      console.log("responseeeeeeee", response);
 
       if (response.ok) {
         const data = await response.json();

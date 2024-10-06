@@ -8,10 +8,15 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+
 import { useTheme } from "@mui/material/styles";
 import React from "react";
 import { useStyles } from "./useStyles";
-import { drawerItemType } from "../../constants/Constants";
+import { drawerItemType } from "../../../constants/Constants";
+import useGetProjects from "../../../hooks/useGetProjects";
+import { AppContext } from "../../../context/store";
+import { useNavigate } from "react-router-dom";
+import PopOverButton from "../../../component/buttons/PopOverButton";
 
 const DraggableDrawer = ({
   isOpen,
@@ -20,9 +25,30 @@ const DraggableDrawer = ({
   selectedItem,
 }) => {
   const theme = useTheme();
-  const { StyledDrawer, sidebarItems } = useStyles();
+  const {
+    StyledDrawer,
+    sidebarItems,
+    titleStyle,
+    boxStyle,
+    projectLabelStyle,
+  } = useStyles();
+
+  const navigate = useNavigate();
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const { userProjects, setUserProject } = React.useContext(AppContext);
+  const { apiData: projectsList, getProjects } = useGetProjects();
+  React.useEffect(() => {
+    getProjects();
+  }, []);
+
+  React.useEffect(() => {
+    if (Array.isArray(projectsList) && projectsList?.length) {
+      setUserProject(projectsList);
+    }
+  }, [projectsList]);
+
   function getDrawerItem(item) {
     switch (item.type) {
       case drawerItemType.divider:
@@ -56,27 +82,36 @@ const DraggableDrawer = ({
       ModalProps={{
         keepMounted: true, // Keep mounted to make it responsive on mobile
       }}
-      sx={{ zIndex: 19 }}
+      sx={{ zIndex: 10 }}
+      // sx={{ zIndex: -1 }}
     >
-      <Box sx={{ width: 240, padding: 1 }} role="presentation">
+      <Box sx={boxStyle} role="presentation">
         <List>{sidebarItems.map((item, index) => getDrawerItem(item))}</List>
-        <Typography
+        <Box
           sx={{
-            fontSize: "14px",
-            lineHeight: "20px",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            fontWeight: 500,
-            padding: "1rem 1.2rem 0",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "0 20px",
           }}
         >
-          Projects
-        </Typography>
+          <Typography sx={titleStyle}>Projects</Typography>
+          <PopOverButton
+            variant="small"
+            color="#1876d2"
+            circleFont="1.5rem"
+            openPopup
+          />
+        </Box>
         <Box sx={{ py: 1 }}>
-          {["project 1", "project 2", "project 3"].map((project) => (
-            <Typography sx={{ px: 2, py: 1, cursor: "pointer" }}>
-              {project}
+          {userProjects?.map((project) => (
+            <Typography
+              sx={projectLabelStyle}
+              onClick={() => {
+                navigate(`/project/${project.project_name}`);
+              }}
+            >
+              {project.project_name}
             </Typography>
           ))}
         </Box>
