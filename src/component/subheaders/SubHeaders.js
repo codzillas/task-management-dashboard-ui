@@ -1,9 +1,12 @@
-import { Box, Button, Typography } from "@mui/material";
-import React from "react";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { Box, Button } from "@mui/material";
+import * as React from "react";
 import theme from "../../theme/theme";
+import BoardView from "../boardview/BoardView";
 
 const SubHeader = ({ projectName }) => {
+  const [isModalOpen, toggleModal] = React.useState(false);
+
   return (
     <Box
       sx={{
@@ -14,9 +17,6 @@ const SubHeader = ({ projectName }) => {
         },
       }}
     >
-      {/* <Typography variant="h4" sx={{ padding: 1, height: "10vh" }}>
-        {projectName}
-      </Typography> */}
       <Box
         sx={{
           backgroundColor: "#1976d2",
@@ -30,6 +30,9 @@ const SubHeader = ({ projectName }) => {
           startIcon={<AddCircleIcon />}
           //   onClick={handleClick}
           variant="text"
+          onClick={() => {
+            toggleModal(true);
+          }}
           sx={{
             backgroundColor: "rgba(255, 255, 255, 0.2)",
             backdropFilter: "blur(10px)",
@@ -47,9 +50,11 @@ const SubHeader = ({ projectName }) => {
           Create Task
         </Button>
       </Box>
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ height: "73vh" }}>SubHeader Content</Box>
-      </Box>
+      <BoardView
+        isModalOpen={isModalOpen}
+        toggleModal={toggleModal}
+        projectName={projectName}
+      />
     </Box>
   );
 };
