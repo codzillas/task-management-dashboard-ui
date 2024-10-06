@@ -19,7 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import MainContentArea from "../content-area/ContentArea";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../../../context/store";
 import useGetProjects from "../../../hooks/useGetProjects";
 import { AppBar, DrawerHeader, Main } from "../useMainStyles";
@@ -27,13 +27,18 @@ import { AppBar, DrawerHeader, Main } from "../useMainStyles";
 const drawerWidth = 240;
 
 export default function PersistentDrawer() {
-  const { userProjects, setUserProject } = React.useContext(AppContext);
-  const { apiData: projectsList, getProjects } = useGetProjects();
-  const navigate = useNavigate();
+  // COMPONENT HOOKS //
 
-  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const pathParams = useParams();
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const { userProjects, setUserProject } = React.useContext(AppContext);
 
+  // CUSTOM HOOKS //
+  const { apiData: projectsList, getProjects } = useGetProjects();
+
+  // SIDE EFFECTS //
   React.useEffect(() => {
     getProjects();
   }, []);
@@ -44,6 +49,7 @@ export default function PersistentDrawer() {
     }
   }, [projectsList]);
 
+  // HANDLERS //
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -81,7 +87,7 @@ export default function PersistentDrawer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+            {pathParams.projectId}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -111,17 +117,18 @@ export default function PersistentDrawer() {
         <Divider />
         <List>
           {userProjects?.map((project, index) => (
-            <ListItem key={project.project_name} disablePadding>
+            <ListItem
+              key={project.project_name}
+              disablePadding
+              onClick={() => {
+                navigate(`/project/${project.project_name}`);
+              }}
+            >
               <ListItemButton>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText
-                  primary={project.project_name}
-                  onClick={() => {
-                    navigate(`/project/${project.project_name}`);
-                  }}
-                />
+                <ListItemText primary={project.project_name} />
               </ListItemButton>
             </ListItem>
           ))}
