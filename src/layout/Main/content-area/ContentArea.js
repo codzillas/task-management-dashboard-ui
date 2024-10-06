@@ -1,12 +1,13 @@
 import React from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useStyles } from "../drawer/useStyles";
-import { useDrawerState } from "../../../constants/Constants";
+import { AppContext } from "../../../context/store";
 
 const MainContentArea = () => {
-  const isOpen = useDrawerState();
+  const { isOpen } = React.useContext(AppContext);
+  console.log("isOpen", isOpen);
   const pathParams = useParams();
-  const { Main } = useStyles();
+  const { CustomContentArea } = useStyles();
   console.log("pathParams", pathParams);
 
   const [searchParams] = useSearchParams();
@@ -14,9 +15,9 @@ const MainContentArea = () => {
   console.log("country", searchParams.get("country"));
   console.log("state", searchParams.get("state"));
   return (
-    <Main open={isOpen}>
-      <h1>Project: {pathParams.projectId}</h1>;
-    </Main>
+    <CustomContentArea open={isOpen}>
+      <h1>Project: {pathParams.projectId}</h1>
+    </CustomContentArea>
   );
 };
 

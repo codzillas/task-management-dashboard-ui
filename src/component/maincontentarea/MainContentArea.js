@@ -1,10 +1,8 @@
 import React from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useStyles } from "../../component/drawer/useStyles";
-import { useDrawerState } from "../../constants/Constants";
 
 const MainContentArea = () => {
-  const isOpen = useDrawerState();
   const pathParams = useParams();
   const { Main } = useStyles();
   console.log("pathParams", pathParams);

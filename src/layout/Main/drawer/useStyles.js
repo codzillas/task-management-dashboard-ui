@@ -27,17 +27,20 @@ function useStyles() {
 
   const projectLabelStyle = { px: 2, py: 1, cursor: "pointer" };
 
-  const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-    ({ theme }) => ({
-      flexGrow: 1,
-      padding: theme.spacing(3),
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      marginLeft: `-${drawerWidth}px`,
-    })
-  );
+  const CustomContentArea = styled("main", {
+    shouldForwardProp: (prop) => {
+      console.log("props", prop);
+      return prop !== "open";
+    },
+  })(({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: open === true ? drawerWidth : 0,
+  }));
 
   return {
     StyledDrawer,
@@ -45,7 +48,7 @@ function useStyles() {
     titleStyle,
     boxStyle,
     projectLabelStyle,
-    Main,
+    CustomContentArea,
   };
 }
 

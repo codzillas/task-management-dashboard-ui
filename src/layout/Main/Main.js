@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import DraggableDrawer from "./drawer/DraggableDrawer";
+import MainContentArea from "./content-area/ContentArea";
 
 function Main({
   selectedItem,
   isOpen,
-  handleDrawerClose,
   handleItemClick,
   toggleDrawer,
 }) {
@@ -23,11 +23,12 @@ function Main({
       <DraggableDrawer
         selectedItem={selectedItem}
         isOpen={isOpen}
-        handleDrawerClose={handleDrawerClose}
         onItemClick={handleItemClick}
         toggleDrawer={toggleDrawer}
       />
-      <Outlet />
+      <MainContentArea>
+        <Outlet />
+      </MainContentArea>
     </Box>
   );
 }

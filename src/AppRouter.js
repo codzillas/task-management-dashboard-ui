@@ -1,35 +1,22 @@
 import React from "react";
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
-
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Login from "./component/auth/Login";
 import Register from "./component/auth/Register";
 import BoardView from "./component/boardview/BoardView";
 import { useDrawerState } from "./constants/Constants";
 import Profile from "./pages/Profile/Profile";
-import Layout from "./layout/header/Layout";
+import AppLayout from "./layout/header/AppLayout";
 
 const AppRouter = () => {
-  const {
-    isOpen,
-    toggleDrawer,
-    handleDrawerClose,
-    handleItemClick,
-    selectedItem,
-  } = useDrawerState();
+  const { handleItemClick, selectedItem } = useDrawerState();
 
-  const AppLayout = (
-    <Layout
-      selectedItem={selectedItem}
-      isOpen={isOpen}
-      handleDrawerClose={handleDrawerClose}
-      handleItemClick={handleItemClick}
-      toggleDrawer={toggleDrawer}
-    />
+  const AppLayoutComponent = (
+    <AppLayout selectedItem={selectedItem} handleItemClick={handleItemClick} />
   );
   return (
     <Router>
       <Routes>
-        <Route path="/" element={AppLayout}>
+        <Route path="/" element={AppLayoutComponent}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/project/:projectId" element={<BoardView />} />
         </Route>
