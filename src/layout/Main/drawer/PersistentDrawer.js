@@ -30,10 +30,10 @@ export default function PersistentDrawer() {
   // COMPONENT HOOKS //
 
   const [open, setOpen] = React.useState(false);
-  const pathParams = useParams();
   const theme = useTheme();
   const navigate = useNavigate();
-  const { userProjects, setUserProject } = React.useContext(AppContext);
+  const { userProjects, setUserProject, setSelectedProject, selectedProject } =
+    React.useContext(AppContext);
 
   // CUSTOM HOOKS //
   const { apiData: projectsList, getProjects } = useGetProjects();
@@ -61,16 +61,7 @@ export default function PersistentDrawer() {
   return (
     <Box sx={{ display: "flex", width: "100%" }}>
       <CssBaseline />
-      <AppBar
-        sx={{
-          marginTop: theme.spacing(8),
-          [theme.breakpoints.down("sm")]: {
-            marginTop: theme.spacing(7), // Smaller margin for mobile screens
-          },
-        }}
-        position="fixed"
-        open={open}
-      >
+      <AppBar position="absolute" open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -87,7 +78,7 @@ export default function PersistentDrawer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            {pathParams.projectId}
+            {selectedProject.project_name}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -121,6 +112,7 @@ export default function PersistentDrawer() {
               key={project.project_name}
               disablePadding
               onClick={() => {
+                setSelectedProject(project);
                 navigate(`/project/${project.project_name}`);
               }}
             >

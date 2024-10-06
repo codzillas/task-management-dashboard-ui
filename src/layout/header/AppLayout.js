@@ -7,7 +7,7 @@ import SearchAppBar from "./SearchAppBar";
 
 const AppLayout = () => {
   const [userProjects, setUserProject] = useState([]);
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedProject, setSelectedProject] = useState({});
   const [userTask, setUserTask] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
 
@@ -23,6 +23,12 @@ const AppLayout = () => {
     }
   }, [localStorage.getItem("token")]);
 
+  React.useEffect(() => {
+    if (userProjects?.length) {
+      setSelectedProject(userProjects[0]);
+    }
+  }, [userProjects]);
+
   const appContextValue = React.useMemo(
     () => ({
       userProjects,
@@ -31,8 +37,8 @@ const AppLayout = () => {
       setUserTask,
       isOpen,
       toggleDrawer,
-      selectedItem,
-      setSelectedItem,
+      setSelectedProject,
+      selectedProject,
     }),
     [
       userProjects,
@@ -41,8 +47,8 @@ const AppLayout = () => {
       setUserTask,
       isOpen,
       toggleDrawer,
-      selectedItem,
-      setSelectedItem,
+      setSelectedProject,
+      selectedProject,
     ]
   );
   return (

@@ -14,10 +14,10 @@ import usePostTask from "../../hooks/useCreateTask";
 import useGetTasks from "../../hooks/useGetTasks";
 import { AppContext } from "../../context/store";
 
-const CreateTaskPopup = ({ toggleModal }) => {
+const CreateTaskPopup = ({ toggleModal, defaultProjectDetails }) => {
   const [taskName, setTaskName] = useState("");
   const [selectedProjectDetails, setSelectedProjectDetails] = React.useState(
-    {}
+    defaultProjectDetails ?? {}
   );
   const [taskDetails, setTaskDetails] = useState("");
   const [taskPriority, setTaskPriority] = useState("");
@@ -75,7 +75,7 @@ const CreateTaskPopup = ({ toggleModal }) => {
       {alert && <Alert severity={alert.severity}>{alert.message}</Alert>}
       <form onSubmit={handleSubmit}>
         <Autocomplete
-          value={selectedProjectDetails.project_name}
+          value={selectedProjectDetails}
           onChange={(event, newValue) => {
             handleProjectSelection(newValue);
           }}
