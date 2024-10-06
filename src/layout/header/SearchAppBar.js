@@ -5,15 +5,15 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchBar from "../searchBar/SearchBar";
-import PopOverButton from "../buttons/PopOverButton";
-import AvatarAction from "../avatarDot/AvatarAction";
+import SearchBar from "../../component/searchBar/SearchBar";
+import PopOverButton from "../../component/buttons/PopOverButton";
+import AvatarAction from "../../component/avatarDot/AvatarAction";
 import { useNavigate } from "react-router-dom";
 
 export default function SearchAppBar({ onMenuClick }) {
   const navigate = useNavigate();
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ mt: 0, zIndex: 10 }}>
       <Toolbar>
         <Box
           sx={{

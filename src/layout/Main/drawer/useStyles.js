@@ -1,18 +1,13 @@
 import { Drawer } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import MailIcon from "@mui/icons-material/Mail";
-import { drawerItemType } from "../../constants/Constants";
 
 function useStyles() {
-  const sidebarItems = [
-    // { type: drawerItemType.drawerItem, text: "Home", icon: <MailIcon /> },
-    // { type: drawerItemType.drawerItem, text: "My Tasks", icon: <MailIcon /> },
-    // { type: drawerItemType.divider },
-  ];
+  const sidebarItems = [];
+  const drawerWidth = 240;
   const StyledDrawer = styled(Drawer)(({ theme, isSmallScreen }) => ({
     "& .MuiDrawer-paper": {
-      width: 240,
-      marginTop: 60,
+      width: drawerWidth,
+      marginTop: 65,
       [theme.breakpoints.down("sm")]: {
         width: isSmallScreen ? "100%" : 150, // Smaller width on mobile screens
       },
@@ -32,12 +27,25 @@ function useStyles() {
 
   const projectLabelStyle = { px: 2, py: 1, cursor: "pointer" };
 
+  const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+    ({ theme }) => ({
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      marginLeft: `-${drawerWidth}px`,
+    })
+  );
+
   return {
     StyledDrawer,
     sidebarItems,
     titleStyle,
     boxStyle,
     projectLabelStyle,
+    Main,
   };
 }
 

@@ -2,7 +2,6 @@ import { Box, TextField } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { jwtDecode } from "jwt-decode";
 import * as React from "react";
 import useGetUserDetails from "../../hooks/useGetUser";
 import { fetchDecodedToken } from "../../util/commonUtils";
@@ -21,11 +20,10 @@ function Profile() {
       sx={{
         width: "100%",
         height: "100vh",
-        backgroundColor: "gray",
         textAlign: "center",
       }}
     >
-      <Card>
+      <Card sx={{ height: "100%" }}>
         <Typography variant="h4" sx={{ py: 2 }}>
           Profile Details
         </Typography>

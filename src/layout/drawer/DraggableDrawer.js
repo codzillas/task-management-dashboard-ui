@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Divider,
   List,
   ListItem,
@@ -9,17 +8,15 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import { useTheme } from "@mui/material/styles";
 import React from "react";
 import { useStyles } from "./useStyles";
-import { drawerItemType } from "../../constants/Constants";
-import useGetProjects from "../../hooks/useGetProjects";
-import fetchDataFromAPI from "../../util/fetchDataFromAPI";
-import { RecentActorsRounded } from "@mui/icons-material";
-import { AppContext } from "../../context/store";
-import PopOverButton from "../buttons/PopOverButton";
+import { drawerItemType } from "../../../constants/Constants";
+import useGetProjects from "../../../hooks/useGetProjects";
+import { AppContext } from "../../../context/store";
+import { useNavigate } from "react-router-dom";
+import PopOverButton from "../../../component/buttons/PopOverButton";
 
 const DraggableDrawer = ({
   isOpen,
@@ -36,11 +33,12 @@ const DraggableDrawer = ({
     projectLabelStyle,
   } = useStyles();
 
+  const navigate = useNavigate();
+
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { userProjects, setUserProject } = React.useContext(AppContext);
   const { apiData: projectsList, getProjects } = useGetProjects();
-  console.log("userProjects", userProjects);
   React.useEffect(() => {
     getProjects();
   }, []);
@@ -84,7 +82,8 @@ const DraggableDrawer = ({
       ModalProps={{
         keepMounted: true, // Keep mounted to make it responsive on mobile
       }}
-      sx={{ zIndex: -1 }}
+      sx={{ zIndex: 10 }}
+      // sx={{ zIndex: -1 }}
     >
       <Box sx={boxStyle} role="presentation">
         <List>{sidebarItems.map((item, index) => getDrawerItem(item))}</List>
@@ -106,7 +105,12 @@ const DraggableDrawer = ({
         </Box>
         <Box sx={{ py: 1 }}>
           {userProjects?.map((project) => (
-            <Typography sx={projectLabelStyle}>
+            <Typography
+              sx={projectLabelStyle}
+              onClick={() => {
+                navigate(`/project/${project.project_name}`);
+              }}
+            >
               {project.project_name}
             </Typography>
           ))}
