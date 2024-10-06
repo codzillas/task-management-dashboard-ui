@@ -32,7 +32,7 @@ export default function PersistentDrawer() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const navigate = useNavigate();
-  const { userProjects, setUserProject, setSelectedProject, selectedProject } =
+  const { userProjects, setUserProjects, setSelectedProject, selectedProject } =
     React.useContext(AppContext);
 
   // CUSTOM HOOKS //
@@ -45,7 +45,7 @@ export default function PersistentDrawer() {
 
   React.useEffect(() => {
     if (Array.isArray(projectsList) && projectsList?.length) {
-      setUserProject(projectsList);
+      setUserProjects(projectsList);
     }
   }, [projectsList]);
 
@@ -107,6 +107,7 @@ export default function PersistentDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
+          {console.log("userProjects", userProjects)}
           {userProjects?.map((project, index) => (
             <ListItem
               key={project.project_name}
