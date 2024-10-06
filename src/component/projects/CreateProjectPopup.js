@@ -21,13 +21,13 @@ const CreateProjectPopup = ({ toggleModal }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [alert, setAlert] = useState(null);
-  const { setUserProject } = React.useContext(AppContext);
+  const { setUserProjects } = React.useContext(AppContext);
   const { postProject } = usePostProject();
   const { apiData, getProjects } = useGetProjects();
   const decodedToken = fetchDecodedToken();
   React.useEffect(() => {
     if (apiData) {
-      setUserProject(apiData);
+      setUserProjects(apiData);
     }
   }, [apiData]);
 
@@ -41,7 +41,6 @@ const CreateProjectPopup = ({ toggleModal }) => {
       end_date: endDate,
       userId: decodedToken.id,
     });
-    console.log("response", response);
     if (response?.ok) {
       setAlert({
         message: "Project created successfully!",

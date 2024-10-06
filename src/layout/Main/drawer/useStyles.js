@@ -4,10 +4,14 @@ import { styled } from "@mui/material/styles";
 function useStyles() {
   const sidebarItems = [];
   const drawerWidth = 240;
-  const StyledDrawer = styled(Drawer)(({ theme, isSmallScreen }) => ({
+  const StyledDrawer = styled(Drawer, {
+    shouldForwardProp: (prop) => {
+      return prop !== "isScrolled" || prop != "scrollPosition";
+    },
+  })(({ theme, isSmallScreen, isScrolled, scrollPosition }) => ({
     "& .MuiDrawer-paper": {
       width: drawerWidth,
-      marginTop: 65,
+      marginTop: 65 - scrollPosition > 0 ? 65 - scrollPosition : 0,
       [theme.breakpoints.down("sm")]: {
         width: isSmallScreen ? "100%" : 150, // Smaller width on mobile screens
       },
@@ -20,24 +24,25 @@ function useStyles() {
     whiteSpace: "nowrap",
     overflow: "hidden",
     fontWeight: 500,
-    // padding: "1rem 1.2rem 0",
   };
 
   const boxStyle = { width: 240, padding: 1 };
 
   const projectLabelStyle = { px: 2, py: 1, cursor: "pointer" };
 
-  const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-    ({ theme }) => ({
-      flexGrow: 1,
-      padding: theme.spacing(3),
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      marginLeft: `-${drawerWidth}px`,
-    })
-  );
+  const CustomContentArea = styled("main", {
+    shouldForwardProp: (prop) => {
+      return prop !== "open";
+    },
+  })(({ theme, open }) => ({
+    flexGrow: 1,
+    width: "100%",
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    // marginLeft: open === true ? drawerWidth : 0,
+  }));
 
   return {
     StyledDrawer,
@@ -45,7 +50,7 @@ function useStyles() {
     titleStyle,
     boxStyle,
     projectLabelStyle,
-    Main,
+    CustomContentArea,
   };
 }
 

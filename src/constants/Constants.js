@@ -11,29 +11,7 @@ export const drawerItemType = {
   label: "label",
 };
 
-export const useDrawerState = () => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [selectedItem, setSelectedItem] = useState("");
-
-  const toggleDrawer = () => {
-    setIsOpen((prevState) => !prevState);
-  };
-
-  const handleDrawerClose = () => {
-    toggleDrawer(false);
-  };
-  const handleItemClick = (item) => {
-    setSelectedItem(item);
-  };
-
-  return {
-    isOpen,
-    selectedItem,
-    toggleDrawer,
-    handleDrawerClose,
-    handleItemClick,
-  };
-};
+export const drawerWidth = 240;
 
 export const useProjectstate = () => {
   const [isCreatingProject, setIsCreatingProject] = useState(false);

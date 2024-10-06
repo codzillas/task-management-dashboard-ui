@@ -23,22 +23,10 @@ export default function SearchAppBar({ onMenuClick }) {
             width: "100%",
           }}
         >
-          {/* Menu Icon on the far left */}
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={onMenuClick}
-          >
-            <MenuIcon />
-          </IconButton>
-
           {/* Typography, hidden on small screens */}
           <Box
             sx={{
               display: { xs: "none", sm: "block" },
-              ml: 1,
             }}
           >
             <Typography

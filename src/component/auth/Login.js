@@ -32,7 +32,6 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Login successful, token:", data.token);
         // Store token in localStorage or context (if needed)
         localStorage.setItem("token", data.token);
         // Navigate to home page after successful login
