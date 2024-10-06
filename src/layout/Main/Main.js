@@ -1,14 +1,7 @@
-import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
-import DraggableDrawer from "./drawer/DraggableDrawer";
-import MainContentArea from "./content-area/ContentArea";
+import PersistentDrawer from "./drawer/PersistentDrawer";
 
-function Main({
-  selectedItem,
-  isOpen,
-  handleItemClick,
-  toggleDrawer,
-}) {
+function Main({ isOpen, toggleDrawer }) {
   return (
     <Box
       sx={{
@@ -18,17 +11,17 @@ function Main({
         top: 64,
         left: 0,
         flexGrow: 1,
+        width: "100%",
       }}
     >
-      <DraggableDrawer
-        selectedItem={selectedItem}
+      {/* <DraggableDrawer
         isOpen={isOpen}
-        onItemClick={handleItemClick}
         toggleDrawer={toggleDrawer}
-      />
-      <MainContentArea>
+      /> */}
+      <PersistentDrawer isOpen={isOpen} toggleDrawer={toggleDrawer} />
+      {/* <MainContentArea>
         <Outlet />
-      </MainContentArea>
+      </MainContentArea> */}
     </Box>
   );
 }

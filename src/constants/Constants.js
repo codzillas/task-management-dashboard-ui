@@ -11,18 +11,7 @@ export const drawerItemType = {
   label: "label",
 };
 
-export const useDrawerState = () => {
-  const [selectedItem, setSelectedItem] = useState("");
 
-  const handleItemClick = (item) => {
-    setSelectedItem(item);
-  };
-
-  return {
-    selectedItem,
-    handleItemClick,
-  };
-};
 
 export const useProjectstate = () => {
   const [isCreatingProject, setIsCreatingProject] = useState(false);

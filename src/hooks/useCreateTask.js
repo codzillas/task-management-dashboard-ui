@@ -29,7 +29,6 @@ const usePostTask = () => {
 
       return { response };
     } catch (err) {
-      console.log("errrro aa gya", err.message);
       console.error("Error posting task:", err);
       setAlert({ message: err.message, severity: "error" });
       return { errMsg: err.message };

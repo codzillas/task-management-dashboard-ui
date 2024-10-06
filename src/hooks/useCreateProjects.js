@@ -30,7 +30,6 @@ const usePostProject = () => {
 
       return { response };
     } catch (err) {
-      console.log("errrro aa gya", err.message);
       console.error("Error posting project:", err);
       setAlert({ message: err.message, severity: "error" });
       return { errMsg: err.message };

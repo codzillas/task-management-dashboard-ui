@@ -38,7 +38,6 @@ export default function PopOverButton({
   };
 
   const handleClick = (event) => {
-    console.log("handleClick");
     setAnchorEl(event.currentTarget);
   };
 

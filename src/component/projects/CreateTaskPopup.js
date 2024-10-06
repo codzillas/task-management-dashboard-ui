@@ -43,7 +43,6 @@ const CreateTaskPopup = ({ toggleModal }) => {
       priority: taskPriority,
       projectDetails: selectedProjectDetails,
     });
-    console.log("response", response);
     if (response?.ok) {
       setAlert({
         message: "Task created successfully!",
@@ -68,7 +67,6 @@ const CreateTaskPopup = ({ toggleModal }) => {
   };
 
   const handleProjectSelection = (newValue) => {
-    console.log(newValue);
     setSelectedProjectDetails(newValue);
     // setSelectedProjectName();
   };

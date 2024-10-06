@@ -41,7 +41,6 @@ const CreateProjectPopup = ({ toggleModal }) => {
       end_date: endDate,
       userId: decodedToken.id,
     });
-    console.log("response", response);
     if (response?.ok) {
       setAlert({
         message: "Project created successfully!",

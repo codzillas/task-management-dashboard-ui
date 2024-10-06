@@ -5,8 +5,9 @@ import { AppContext } from "../../context/store";
 import Main from "../Main/Main";
 import SearchAppBar from "./SearchAppBar";
 
-const AppLayout = ({ selectedItem, handleItemClick }) => {
+const AppLayout = () => {
   const [userProjects, setUserProject] = useState([]);
+  const [selectedItem, setSelectedItem] = useState("");
   const [userTask, setUserTask] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
 
@@ -30,19 +31,25 @@ const AppLayout = ({ selectedItem, handleItemClick }) => {
       setUserTask,
       isOpen,
       toggleDrawer,
+      selectedItem,
+      setSelectedItem,
     }),
-    [userProjects, setUserProject, userTask, setUserTask, isOpen, toggleDrawer]
+    [
+      userProjects,
+      setUserProject,
+      userTask,
+      setUserTask,
+      isOpen,
+      toggleDrawer,
+      selectedItem,
+      setSelectedItem,
+    ]
   );
   return (
     <AppContext.Provider value={appContextValue}>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <SearchAppBar onMenuClick={() => toggleDrawer()} />
-        <Main
-          selectedItem={selectedItem}
-          isOpen={isOpen}
-          onItemClick={handleItemClick}
-          toggleDrawer={toggleDrawer}
-        />
+        <Main isOpen={isOpen} toggleDrawer={toggleDrawer} />
       </Box>
     </AppContext.Provider>
   );
