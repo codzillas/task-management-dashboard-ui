@@ -21,7 +21,6 @@ export default function Section({ section }) {
   const [taskName, setTaskName] = React.useState("");
   const [tasks, setTasks] = React.useState([]); // Array to hold multiple tasks
   const [showTaskCard, setShowTaskCard] = React.useState(false);
-
   const { apiData: getTasksApiData, getTasks } = useGetTasks();
   React.useEffect(() => {
     getTasks();
@@ -56,21 +55,23 @@ export default function Section({ section }) {
     setTaskName(name);
   };
 
-  const handleAddTask = () => {
+  const handleAddTask = (sectionId) => {
     console.log("taskName", taskName);
     if (taskName.trim() === "") return; // Prevent adding empty tasks
-    setTasks((prevTasks) => [...prevTasks, taskName]); // Add new task to the array
+    setTasks((prevTasks) => [
+      ...prevTasks,
+      { section_id: sectionId, name: taskName },
+    ]); // Add new task to the array
     setTaskName(""); // Clear the input after adding the task
   };
 
-  const handleTaskBlur = () => {
-    handleAddTask();
+  const handleTaskBlur = (sectionId) => {
+    handleAddTask(sectionId);
   };
 
-  const handleKeyDown = (event) => {
-    console.log("handleKeyDown", event.key);
+  const handleKeyDown = (event, sectionId) => {
     if (event.key === "Enter") {
-      handleAddTask();
+      handleAddTask(sectionId);
     }
   };
 
@@ -164,8 +165,10 @@ export default function Section({ section }) {
           <TaskCard
             taskName={taskName}
             onTaskNameChange={handleTaskNameChange}
-            onBlur={handleTaskBlur} // Call handleTaskBlur on blur
-            handleKeyDown={handleKeyDown}
+            onBlur={() => handleTaskBlur(section.section_id)} // Call handleTaskBlur on blur
+            handleKeyDown={(e) => {
+              handleKeyDown(e, section.section_id);
+            }}
           />
         )}
         {/* Button to Show Task Card */}
