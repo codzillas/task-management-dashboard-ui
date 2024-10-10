@@ -24,3 +24,5 @@ yarn-error.log*
 
 backup
 /backend-task-management-dashboard2
+
+*.sql
