@@ -8,8 +8,8 @@ import React, {
 } from "react";
 import themeColors from "../../constants/ThemeColors";
 import { AppContext } from "../../context/store";
-import useCreateSection from "../../hooks/useCreateSection";
-import useGetProject from "../../hooks/useGetProject";
+import useCreateSection from "../../hooks/section/useCreateSection";
+import useGetProject from "../../hooks/project/useGetProject";
 import CreateTaskPopup from "../projects/CreateTaskPopup";
 import { boardViewStyles } from "./BoardViewStyles";
 import Section from "./Section";
@@ -116,16 +116,33 @@ function BoardView({ isModalOpen, toggleModal, projectName }) {
               <TextField
                 value={sectionName}
                 autoFocus
-                sx={{ color: themeColors.sectionHeader }}
                 ref={ref}
                 placeholder="Add Section"
                 onChange={(e) => setSectionName(e.target.value)}
                 onKeyDown={handleKeyDown}
+                sx={{
+                  backgroundColor: "#3c3d3f", // Slightly darker background for the input
+                  borderRadius: "4px",
+                  flexGrow: 1, // Fill available space
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "white", // White border
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "white", // Hover effect
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "white", // Focused effect
+                    },
+                    "& input": {
+                      color: "white", // Text color in the input field
+                    },
+                  },
+                }}
               />
             ) : (
               <Typography
                 ref={ref}
-                sx={{ color: themeColors.sectionHeader }}
                 variant="h5"
                 onClick={() => setAddSectionClicked(true)}
               >

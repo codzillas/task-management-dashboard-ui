@@ -20,7 +20,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import MainContentArea from "../content-area/ContentArea";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AppContext } from "../../../context/store";
-import useGetProjects from "../../../hooks/useGetProjects";
+import useGetProjects from "../../../hooks/project/useGetProjects";
 import { AppBar, DrawerHeader, Main } from "../useMainStyles";
 
 const drawerWidth = 240;

@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import fetchDataFromAPI from "../util/fetchDataFromAPI";
-import axiosInstance from "../axios/axios";
+import fetchDataFromAPI from "../../util/fetchDataFromAPI";
+import axiosInstance from "../../axios/axios";
 const useCreateSection = () => {
   const [apiData, setApiData] = React.useState(null);
   const createSection = useCallback(async ({ projectId, sectionName }) => {

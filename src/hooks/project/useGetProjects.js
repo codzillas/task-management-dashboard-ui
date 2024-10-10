@@ -1,5 +1,5 @@
 import React from "react";
-import fetchDataFromAPI from "../util/fetchDataFromAPI";
+import fetchDataFromAPI from "../../util/fetchDataFromAPI";
 
 const useGetProjects = () => {
   const [apiData, setApiData] = React.useState(null);

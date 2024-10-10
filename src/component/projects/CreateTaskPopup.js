@@ -10,8 +10,8 @@ import {
   MenuItem,
   Autocomplete,
 } from "@mui/material";
-import usePostTask from "../../hooks/useCreateTask";
-import useGetTasks from "../../hooks/useGetTasks";
+import useCreateTask from "../../hooks/task/useCreateTask";
+import useGetTasks from "../../hooks/task/useGetTasks";
 import { AppContext } from "../../context/store";
 
 const CreateTaskPopup = ({ toggleModal, defaultProjectDetails }) => {
@@ -24,7 +24,7 @@ const CreateTaskPopup = ({ toggleModal, defaultProjectDetails }) => {
   const [taskStatus, setTaskStatus] = useState("Pending");
   const [alert, setAlert] = useState(null);
   const { setUserTask } = React.useContext(AppContext);
-  const { postTask } = usePostTask();
+  const { postTask } = useCreateTask();
   const { apiData, getTasks } = useGetTasks();
 
   const { userProjects } = React.useContext(AppContext);

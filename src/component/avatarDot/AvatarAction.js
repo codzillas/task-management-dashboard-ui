@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import AvatarDot from "./Avatar";
-import useLogout from "../../hooks/useLogout";
+import useLogout from "../../hooks/user/useLogout";
 import { useNavigate } from "react-router-dom";
 
 const AvatarAction = () => {

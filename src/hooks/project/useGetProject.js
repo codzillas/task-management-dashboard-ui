@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import fetchDataFromAPI from "../util/fetchDataFromAPI";
+import fetchDataFromAPI from "../../util/fetchDataFromAPI";
 
 const useGetProject = () => {
   const [apiData, setApiData] = React.useState(null);

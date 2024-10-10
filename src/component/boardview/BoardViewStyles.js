@@ -18,9 +18,9 @@ export function boardViewStyles() {
     flex: "0 0 24%",
     borderRight: "1px solid",
     boxSizing: "border-box",
-    overflowY: "hidden",
     textAlign: "center",
     padding: 1,
+    color: "white",
   };
 
   const sectionHeader = {

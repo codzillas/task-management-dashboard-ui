@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-const usePostTask = () => {
+const useCreateTask = () => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ message: "", severity: "" });
 
   const postTask = async (taskData) => {
     setLoading(true);
-    setAlert({ message: "", severity: "" }); // Clear previous alerts
+    setAlert({ message: "", severity: "" });
 
     try {
       const response = await fetch("http://localhost:5001/api/tasks", {
@@ -44,4 +44,4 @@ const usePostTask = () => {
   return { postTask, loading, alert };
 };
 
-export default usePostTask;
+export default useCreateTask;

@@ -9,8 +9,8 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import usePostProject from "../../hooks/useCreateProjects";
-import useGetProjects from "../../hooks/useGetProjects";
+import usePostProject from "../../hooks/project/useCreateProjects";
+import useGetProjects from "../../hooks/project/useGetProjects";
 import { AppContext } from "../../context/store";
 import { fetchDecodedToken } from "../../util/commonUtils";
 
