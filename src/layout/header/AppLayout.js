@@ -1,33 +1,35 @@
 import { Box } from "@mui/material";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/store";
 import Main from "../Main/Main";
 import SearchAppBar from "./SearchAppBar";
 
 const AppLayout = () => {
+  const navigate = useNavigate();
   const [userProjects, setUserProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState({});
   const [userTask, setUserTask] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
 
-  const toggleDrawer = () => {
+  const toggleDrawer = useCallback(() => {
     setIsOpen((prevState) => !prevState);
-  };
-
-  const navigate = useNavigate();
+  }, [setIsOpen]);
 
   React.useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
     }
-  }, [localStorage.getItem("token")]);
+    if (selectedProject.project_id) {
+      navigate(`/project/${selectedProject.project_id}`);
+    }
+  }, [selectedProject.project_id, navigate]);
 
   React.useEffect(() => {
     if (userProjects?.length) {
       setSelectedProject(userProjects[0]);
     }
-  }, [userProjects]);
+  }, [userProjects, setSelectedProject]);
 
   const appContextValue = React.useMemo(
     () => ({
