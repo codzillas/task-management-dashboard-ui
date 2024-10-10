@@ -1,18 +1,18 @@
-import React from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  IconButton,
-  Tooltip,
-  Box,
-  TextField,
-} from "@mui/material";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday"; // Due date icon
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"; // Tick icon
 import PersonIcon from "@mui/icons-material/Person"; // Assign user icon
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday"; // Due date icon
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  IconButton,
+  TextField,
+  Tooltip,
+} from "@mui/material";
+import React from "react";
 
-function TaskCard({ taskName, assignedUser, dueDate }) {
+function TaskCard({ taskName, onTaskNameChange, onBlur, handleKeyDown }) {
   return (
     <Card
       sx={{
@@ -28,21 +28,24 @@ function TaskCard({ taskName, assignedUser, dueDate }) {
         <Box display="flex" alignItems="center">
           <IconButton
             sx={{
+              height: 0,
+              width: 0,
               border: "2px solid white",
               borderRadius: "50%",
               backgroundColor: "transparent",
               marginRight: 1,
             }}
           >
-            <CheckCircleIcon sx={{ color: "white" }} />
+            <CheckCircleIcon sx={{ color: "white", fontSize: 16 }} />
           </IconButton>
-
           <TextField
-            autoFocus
+            autoFocus={!taskName ? true : false}
             variant="outlined"
             placeholder="Add task name"
+            onChange={(e) => onTaskNameChange(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onBlur={onBlur} // Call the provided onBlur function
             value={taskName}
-            onChange={(e) => {}}
             sx={{
               backgroundColor: "#3c3d3f", // Slightly darker background for the input
               borderRadius: "4px",

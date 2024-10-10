@@ -1,17 +1,39 @@
-import { Box, Button, Card, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import React from "react";
 import { boardViewStyles } from "./BoardViewStyles";
-import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import AddIcon from "@mui/icons-material/Add"; // Import the Add icon
-import TaskCard from "./Task";
+import AddIcon from "@mui/icons-material/Add";
+import TaskCard from "./Task"; // Ensure this is your TaskCard component
+import useGetTasks from "../../hooks/task/useGetTasks";
 
 export default function Section({ section }) {
-  const { mainSectionContainer__Inner_Inner, sectionHeader, taskCard } =
+  const { mainSectionContainer__Inner_Inner, sectionHeader } =
     boardViewStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [taskName, setTaskName] = React.useState("");
+  const [tasks, setTasks] = React.useState([]); // Array to hold multiple tasks
+  const [showTaskCard, setShowTaskCard] = React.useState(false);
 
+  const { apiData: getTasksApiData, getTasks } = useGetTasks();
+  React.useEffect(() => {
+    getTasks();
+  }, []);
+
+  React.useEffect(() => {
+    setTasks(getTasksApiData);
+  }, [getTasksApiData]);
+
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [tasks]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -21,17 +43,12 @@ export default function Section({ section }) {
   };
 
   const handleMenuItemClick = (action) => {
-    console.log(action); // Handle menu item click action here
+    console.log(action);
     handleClose();
   };
 
   const handleAddClick = () => {
-    console.log("Add button clicked"); // Handle add button click here
-  };
-
-  const [taskName, setTaskName] = React.useState("");
-  const [showTaskCard, setShowTaskCard] = React.useState(false);
-  const toggleTaskCard = () => {
+    // Show the task card when the button is clicked
     setShowTaskCard((prev) => !prev);
   };
 
@@ -40,35 +57,46 @@ export default function Section({ section }) {
   };
 
   const handleAddTask = () => {
-    // Logic to add the task (for now, just log it)
-    console.log("Task added:", taskName);
+    console.log("taskName", taskName);
+    if (taskName.trim() === "") return; // Prevent adding empty tasks
+    setTasks((prevTasks) => [...prevTasks, taskName]); // Add new task to the array
     setTaskName(""); // Clear the input after adding the task
-    setShowTaskCard(false); // Hide the task card after adding
   };
+
+  const handleTaskBlur = () => {
+    handleAddTask();
+  };
+
+  const handleKeyDown = (event) => {
+    console.log("handleKeyDown", event.key);
+    if (event.key === "Enter") {
+      handleAddTask();
+    }
+  };
+
+  const scrollContainerRef = React.useRef(null);
+  const scrollToBottom = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  console.log("tasks", tasks);
   return (
     <Box key={section.section_id} sx={mainSectionContainer__Inner_Inner}>
       <Box sx={sectionHeader}>
-        <Box
-          sx={{
-            display: "flex",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: 16,
-            }}
-            variant="h3"
-          >
+        <Box sx={{ display: "flex" }}>
+          <Typography sx={{ fontSize: 16 }} variant="h3">
             {section.name}
           </Typography>
           <Typography sx={{ mx: 1, fontSize: 16 }} variant="h3">
-            {0}
+            {tasks?.length} {/* Display the number of tasks */}
           </Typography>
         </Box>
         <div>
           <Button
             variant="text" // Use text variant for a transparent background
-            onClick={handleAddClick}
+            onClick={handleAddClick} // Show the input card on button click
             sx={{
               minWidth: "auto", // Adjust button width
               padding: 1, // Adjust padding to fit the icon
@@ -110,23 +138,46 @@ export default function Section({ section }) {
           </Menu>
         </div>
       </Box>
-      <Box sx={{ padding: 2 }}>
-        {/* Task Card */}
+      <Box sx={{ padding: 2, overflowY: "auto" }}>
+        {/* Render existing tasks using TaskCard */}
+        <Box sx={{ marginTop: 2 }}>
+          {tasks?.length > 0 ? (
+            tasks
+              .filter((t) => t.section_id === section.section_id)
+              .map((task) => (
+                <TaskCard
+                  key={task.task_id}
+                  taskName={task.name}
+                  onTaskNameChange={() => {}} // You can implement task name editing if needed
+                  onBlur={() => {}} // You can implement onBlur behavior if needed
+                  // You may want to add more props to TaskCard if needed for rendering
+                />
+              ))
+          ) : (
+            <Typography variant="body2" color="gray">
+              No tasks added yet.
+            </Typography>
+          )}
+        </Box>
+        {/* Show the input card for new task */}
         {showTaskCard && (
           <TaskCard
             taskName={taskName}
             onTaskNameChange={handleTaskNameChange}
-            onAddTask={handleAddTask}
+            onBlur={handleTaskBlur} // Call handleTaskBlur on blur
+            handleKeyDown={handleKeyDown}
           />
         )}
         {/* Button to Show Task Card */}
         <Button
           variant="contained"
           color="primary"
-          onClick={() => toggleTaskCard()} // Show the task card on button click
+          onClick={handleAddClick} // Only opens the input card
+          sx={{ marginTop: 2 }} // Margin to separate from other elements
         >
           + Add Task
         </Button>
+        <div ref={scrollContainerRef} />
       </Box>
     </Box>
   );
