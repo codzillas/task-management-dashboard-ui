@@ -2,9 +2,7 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchBar from "../../component/searchBar/SearchBar";
 import PopOverButton from "../../component/buttons/PopOverButton";
 import AvatarAction from "../../component/avatarDot/AvatarAction";
@@ -13,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 export default function SearchAppBar({ onMenuClick }) {
   const navigate = useNavigate();
   return (
-    <AppBar position="static" sx={{ mt: 0, zIndex: 10 }}>
+    <AppBar position="static" color="primary" sx={{ mt: 0, zIndex: 10 }}>
       <Toolbar>
         <Box
           sx={{
