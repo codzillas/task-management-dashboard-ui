@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 const usePostProject = () => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ message: "", severity: "" });
 
-  const postProject = async (projectData) => {
+  const postProject = useCallback(async (projectData) => {
     setLoading(true);
     setAlert({ message: "", severity: "" }); // Clear previous alerts
 
@@ -22,7 +22,7 @@ const usePostProject = () => {
         throw new Error(errorData.errorMsg);
       }
 
-      const data = await response.json();
+      // const data = await response.json();
       setAlert({
         message: "Project created successfully!",
         severity: "success",
@@ -40,7 +40,7 @@ const usePostProject = () => {
         setAlert({ message: "", severity: "" });
       }, 4000);
     }
-  };
+  }, []);
 
   return { postProject, loading, alert };
 };
