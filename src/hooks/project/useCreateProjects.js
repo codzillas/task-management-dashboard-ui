@@ -1,20 +1,20 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-const usePostTask = () => {
+const usePostProject = () => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ message: "", severity: "" });
 
-  const postTask = async (taskData) => {
+  const postProject = useCallback(async (projectData) => {
     setLoading(true);
     setAlert({ message: "", severity: "" }); // Clear previous alerts
 
     try {
-      const response = await fetch("http://localhost:5001/api/tasks", {
+      const response = await fetch("http://localhost:5001/api/projects", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(taskData),
+        body: JSON.stringify(projectData),
       });
 
       if (!response.ok) {
@@ -22,14 +22,15 @@ const usePostTask = () => {
         throw new Error(errorData.errorMsg);
       }
 
+      // const data = await response.json();
       setAlert({
-        message: "Task created successfully!",
+        message: "Project created successfully!",
         severity: "success",
       });
 
       return { response };
     } catch (err) {
-      console.error("Error posting task:", err);
+      console.error("Error posting project:", err);
       setAlert({ message: err.message, severity: "error" });
       return { errMsg: err.message };
     } finally {
@@ -39,9 +40,9 @@ const usePostTask = () => {
         setAlert({ message: "", severity: "" });
       }, 4000);
     }
-  };
+  }, []);
 
-  return { postTask, loading, alert };
+  return { postProject, loading, alert };
 };
 
-export default usePostTask;
+export default usePostProject;

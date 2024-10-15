@@ -1,20 +1,20 @@
 import { useState } from "react";
 
-const usePostProject = () => {
+const useCreateTask = () => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ message: "", severity: "" });
 
-  const postProject = async (projectData) => {
+  const postTask = async (taskData) => {
     setLoading(true);
-    setAlert({ message: "", severity: "" }); // Clear previous alerts
+    setAlert({ message: "", severity: "" });
 
     try {
-      const response = await fetch("http://localhost:5001/api/projects", {
+      const response = await fetch("http://localhost:5001/api/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(projectData),
+        body: JSON.stringify(taskData),
       });
 
       if (!response.ok) {
@@ -22,15 +22,14 @@ const usePostProject = () => {
         throw new Error(errorData.errorMsg);
       }
 
-      const data = await response.json();
       setAlert({
-        message: "Project created successfully!",
+        message: "Task created successfully!",
         severity: "success",
       });
 
       return { response };
     } catch (err) {
-      console.error("Error posting project:", err);
+      console.error("Error posting task:", err);
       setAlert({ message: err.message, severity: "error" });
       return { errMsg: err.message };
     } finally {
@@ -42,7 +41,7 @@ const usePostProject = () => {
     }
   };
 
-  return { postProject, loading, alert };
+  return { postTask, loading, alert };
 };
 
-export default usePostProject;
+export default useCreateTask;

@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import useGetUserDetails from "../../hooks/useGetUser";
+import useGetUserDetails from "../../hooks/user/useGetUser";
 import { fetchDecodedToken } from "../../util/commonUtils";
 
 function Profile() {

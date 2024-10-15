@@ -1,9 +1,8 @@
 import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
@@ -19,9 +18,9 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import MainContentArea from "../content-area/ContentArea";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { AppContext } from "../../../context/store";
-import useGetProjects from "../../../hooks/useGetProjects";
+import useGetProjects from "../../../hooks/project/useGetProjects";
 import { AppBar, DrawerHeader, Main } from "../useMainStyles";
 
 const drawerWidth = 240;
@@ -61,10 +60,16 @@ export default function PersistentDrawer() {
   return (
     <Box sx={{ display: "flex", width: "100%" }}>
       <CssBaseline />
-      <AppBar position="absolute" open={open}>
+      <AppBar
+        position="absolute"
+        open={open}
+        sx={{
+          background: theme.palette.secondary.main,
+          color: theme.palette.text.primary,
+        }}
+      >
         <Toolbar>
           <IconButton
-            color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
@@ -107,7 +112,6 @@ export default function PersistentDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {console.log("userProjects", userProjects)}
           {userProjects?.map((project, index) => (
             <ListItem
               key={project.project_name}

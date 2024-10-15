@@ -1,126 +1,160 @@
 import { Box, Modal, TextField, Typography } from "@mui/material";
-import * as React from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import themeColors from "../../constants/ThemeColors";
 import { AppContext } from "../../context/store";
-import useGetProject from "../../hooks/useGetProject";
+import useCreateSection from "../../hooks/section/useCreateSection";
+import useGetProject from "../../hooks/project/useGetProject";
 import CreateTaskPopup from "../projects/CreateTaskPopup";
+import { boardViewStyles } from "./BoardViewStyles";
+import Section from "./Section";
 
 function BoardView({ isModalOpen, toggleModal, projectName }) {
-  const { selectedProject, setSelectedProject } = React.useContext(AppContext);
-  console.log("selectedProject", selectedProject);
-  const [addSectionClicked, setAddSectionClicked] = React.useState(false);
-  const [sectionName, setSectionName] = React.useState("");
-  const { apiData: selectedProjectDetails, getProject } = useGetProject({
+  const scrollContainerRef = useRef(null);
+  const ref = useRef(null);
+  const { selectedProject } = useContext(AppContext);
+  const [addSectionClicked, setAddSectionClicked] = useState(false);
+  const [projectDetails, setProjectDetails] = useState(null);
+  const [newSectionCreated, setNewSectionCreated] = useState(false);
+
+  const [sectionName, setSectionName] = useState("");
+  const { apiData, getProject } = useGetProject({
     projectId: selectedProject.project_id,
   });
+  const { apiData: createdSection, createSection } = useCreateSection();
+  const {
+    mainSectionContainer,
+    mainSectionContainer__Inner,
+    mainSectionContainer__Inner_Inner,
+  } = boardViewStyles();
 
-  const ref = React.useRef(null);
-  console.log("sectionName", sectionName);
-  const handleClickOutside = React.useCallback(
-    (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setAddSectionClicked(false);
-        console.log("sectionName", sectionName);
-        setSectionName("");
-      }
-    },
-    [sectionName]
-  );
+  const resetStates = () => {
+    setAddSectionClicked(false);
+    setSectionName("");
+  };
 
-  React.useEffect(() => {
-    // Attach event listener to detect clicks outside
-    document.addEventListener("mousedown", handleClickOutside);
-
-    // Cleanup the event listener on unmount
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [sectionName]);
-
-  React.useEffect(() => {
+  // API CALLS //
+  const addNewSection = () => {
+    if (sectionName) {
+      createSection({ sectionName, projectId: selectedProject.project_id });
+      setNewSectionCreated(true);
+    }
+  };
+  const getProjectDetails = () => {
     if (selectedProject.project_id) {
       getProject({ projectId: selectedProject.project_id });
     }
-  }, [selectedProject.project_id]);
-  console.log("selectedProjectrttttt", selectedProject);
+  };
+
+  const handleClickOutside = useCallback(
+    (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        addNewSection();
+        resetStates();
+      }
+    },
+    [sectionName, addNewSection]
+  );
+
+  const scrollToRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        left: scrollContainerRef.current.scrollWidth, // Scroll to the maximum width
+        behavior: "smooth", // Smooth scrolling
+      });
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && sectionName) {
+      addNewSection();
+      resetStates();
+    }
+  };
+
+  // SIDE EFFECTS //
+  useEffect(() => {
+    getProjectDetails();
+  }, [createdSection?.section_id]);
+
+  useEffect(() => {
+    setProjectDetails(apiData);
+  }, [apiData]);
+
+  useEffect(() => {
+    if (newSectionCreated) {
+      scrollToRight();
+      setNewSectionCreated(false);
+    }
+  }, [projectDetails]);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
+
+  useEffect(() => {
+    getProjectDetails();
+  }, [selectedProject.project_id, getProject]);
+
   return (
-    <React.Fragment>
-      <Box
-        sx={{
-          backgroundColor: "#29292c",
-          overflowX: "auto",
-        }}
-      >
-        <Box sx={{ height: "80vh", display: "flex", width: "max-content" }}>
-          {selectedProject?.sections?.map((section) => (
-            <Box
-              key={section.section_id}
-              sx={{
-                height: "100%",
-                border: "1px solid",
-                p: 1,
-                width: "100%",
-                minWidth: "100%",
-                boxSizing: "border-box",
-                overflowY: "hidden",
-              }}
-            >
-              <Typography sx={{ color: "white" }} variant="h5">
-                {section.name}
-              </Typography>
-              {/* <Box sx={{ height: "100%", textAlign: "center", py: 4 }}>
-                <Button sx={{ color: "gray", border: "1px solid " }}>
-                  Add Task
-                </Button>
-              </Box> */}
-            </Box>
+    <>
+      <Box sx={mainSectionContainer}>
+        <Box sx={mainSectionContainer__Inner} ref={scrollContainerRef}>
+          {projectDetails?.sections?.map((section) => (
+            <Section key={section.section_id} section={section} />
           ))}
-          <Box
-            sx={{
-              height: "100%",
-              border: "1px solid",
-              p: 1,
-              width: "100%",
-              minWidth: "100%",
-              boxSizing: "border-box",
-              overflowY: "hidden",
-            }}
-          >
+          <Box sx={mainSectionContainer__Inner_Inner}>
             {addSectionClicked ? (
               <TextField
                 value={sectionName}
-                sx={{ color: "white" }}
+                autoFocus
                 ref={ref}
                 placeholder="Add Section"
-                onChange={(e) => {
-                  setSectionName(e.target.value);
+                onChange={(e) => setSectionName(e.target.value)}
+                onKeyDown={handleKeyDown}
+                sx={{
+                  backgroundColor: "#3c3d3f", // Slightly darker background for the input
+                  borderRadius: "4px",
+                  flexGrow: 1, // Fill available space
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "white", // White border
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "white", // Hover effect
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "white", // Focused effect
+                    },
+                    "& input": {
+                      color: "white", // Text color in the input field
+                    },
+                  },
                 }}
               />
             ) : (
               <Typography
                 ref={ref}
-                sx={{ color: "white" }}
                 variant="h5"
-                onClick={() => {
-                  setAddSectionClicked(true);
-                }}
+                onClick={() => setAddSectionClicked(true)}
               >
                 Add Section
               </Typography>
             )}
-
-            {/* <Box sx={{ height: "100%", textAlign: "center", py: 4 }}>
-                <Button sx={{ color: "gray", border: "1px solid " }}>
-                  Add Task
-                </Button>
-              </Box> */}
           </Box>
         </Box>
       </Box>
       <Modal
-        open={isModalOpen} // Modal open if there's content
-        onClose={() => {
-          toggleModal(false);
-        }}
+        open={isModalOpen}
+        onClose={() => toggleModal(false)}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
@@ -149,7 +183,7 @@ function BoardView({ isModalOpen, toggleModal, projectName }) {
           </Box>
         </Box>
       </Modal>
-    </React.Fragment>
+    </>
   );
 }
 
