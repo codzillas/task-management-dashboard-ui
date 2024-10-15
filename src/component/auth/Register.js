@@ -1,80 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Navigate, useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../constants/Constants";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#1976d2", // Blue color
-    },
-    secondary: {
-      main: "#ffffff", // White color
-    },
-  },
-});
+import { ThemeProvider } from "@mui/material/styles";
+import { Navigate} from "react-router-dom";
+import theme from "../../theme/theme";
+import useRegisterHook from "./useRegisterHook";
 
 const Register = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [redirect, setRedirect] = useState(false);
-  const navigate = useNavigate();
+  const registerHook = useRegisterHook();
 
-  React.useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/");
-    }
-  }, [localStorage.getItem("token")]);
-
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-
-    // Basic validation
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
-      setError("All fields are required.");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    try {
-      // API call to sign up endpoint
-      const response = await fetch(`${BASE_URL}/api/auth/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          first_name: firstName,
-          last_name: lastName,
-          email: email,
-          password: password,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        alert("User registered successfully.");
-        setRedirect(true); // Redirect to the login page
-      } else {
-        const errorData = await response.json();
-        setError(`Sign up failed: ${errorData.message}`);
-      }
-    } catch (error) {
-      console.error("Error during sign up:", error);
-      setError("Sign up failed. Please try again.");
-    }
-  };
-
-  if (redirect) {
+  if (registerHook.redirect) {
     return <Navigate to="/login" />;
   }
 
@@ -95,65 +29,79 @@ const Register = () => {
           <Typography variant="h4" color="primary" gutterBottom>
             Sign Up
           </Typography>
-          {error && <Typography color="error">{error}</Typography>}
-          <form onSubmit={handleSignUp} style={{ width: "100%" }}>
+          {registerHook.error && (
+            <Typography color="error">{registerHook.error}</Typography>
+          )}
+          <form onSubmit={registerHook.handleSignUp} style={{ width: "100%" }}>
             <TextField
               fullWidth
               margin="normal"
               label="First Name"
               variant="outlined"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={registerHook.firstName}
+              onChange={(e) => registerHook.setFirstName(e.target.value)}
               required
-              error={!firstName && error}
-              helperText={!firstName && error ? "Required" : ""}
+              error={!registerHook.firstName && registerHook.error}
+              helperText={
+                !registerHook.firstName && registerHook.error ? "Required" : ""
+              }
             />
             <TextField
               fullWidth
               margin="normal"
               label="Last Name"
               variant="outlined"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              value={registerHook.lastName}
+              onChange={(e) => registerHook.setLastName(e.target.value)}
               required
-              error={!lastName && error}
-              helperText={!lastName && error ? "Required" : ""}
+              error={!registerHook.lastName && registerHook.error}
+              helperText={
+                !registerHook.lastName && registerHook.error ? "Required" : ""
+              }
             />
             <TextField
               fullWidth
               margin="normal"
               label="Email"
               variant="outlined"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={registerHook.email}
+              onChange={(e) => registerHook.setEmail(e.target.value)}
               required
               type="email"
-              error={!email && error}
-              helperText={!email && error ? "Required" : ""}
+              error={!registerHook.email && registerHook.error}
+              helperText={
+                !registerHook.email && registerHook.error ? "Required" : ""
+              }
             />
             <TextField
               fullWidth
               margin="normal"
               label="Password"
               variant="outlined"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={registerHook.password}
+              onChange={(e) => registerHook.setPassword(e.target.value)}
               required
               type="password"
-              error={!password && error}
-              helperText={!password && error ? "Required" : ""}
+              error={!registerHook.password && registerHook.error}
+              helperText={
+                !registerHook.password && registerHook.error ? "Required" : ""
+              }
             />
             <TextField
               fullWidth
               margin="normal"
               label="Confirm Password"
               variant="outlined"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={registerHook.confirmPassword}
+              onChange={(e) => registerHook.setConfirmPassword(e.target.value)}
               required
               type="password"
-              error={!confirmPassword && error}
-              helperText={!confirmPassword && error ? "Required" : ""}
+              error={!registerHook.confirmPassword && registerHook.error}
+              helperText={
+                !registerHook.confirmPassword && registerHook.error
+                  ? "Required"
+                  : ""
+              }
             />
             <Button
               fullWidth

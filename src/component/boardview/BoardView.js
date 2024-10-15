@@ -6,10 +6,9 @@ import React, {
   useRef,
   useState,
 } from "react";
-import themeColors from "../../constants/ThemeColors";
 import { AppContext } from "../../context/store";
-import useCreateSection from "../../hooks/section/useCreateSection";
 import useGetProject from "../../hooks/project/useGetProject";
+import useCreateSection from "../../hooks/section/useCreateSection";
 import CreateTaskPopup from "../projects/CreateTaskPopup";
 import { boardViewStyles } from "./BoardViewStyles";
 import Section from "./Section";
@@ -67,6 +66,7 @@ function BoardView({ isModalOpen, toggleModal, projectName }) {
         left: scrollContainerRef.current.scrollWidth, // Scroll to the maximum width
         behavior: "smooth", // Smooth scrolling
       });
+      setNewSectionCreated(false);
     }
   };
 
@@ -89,7 +89,6 @@ function BoardView({ isModalOpen, toggleModal, projectName }) {
   useEffect(() => {
     if (newSectionCreated) {
       scrollToRight();
-      setNewSectionCreated(false);
     }
   }, [projectDetails]);
 
