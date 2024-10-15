@@ -91,7 +91,8 @@ export default function Section({ section }) {
             {section.name}
           </Typography>
           <Typography sx={{ mx: 1, fontSize: 16 }} variant="h3">
-            {tasks?.length} {/* Display the number of tasks */}
+            {tasks?.filter((t) => t.section_id === section.section_id).length}
+            {/* Display the number of tasks */}
           </Typography>
         </Box>
         <div>
