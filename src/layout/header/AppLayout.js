@@ -1,68 +1,28 @@
 import { Box } from "@mui/material";
-import React, { useCallback, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import React from "react";
+import { Navigate } from "react-router-dom";
 import { AppContext } from "../../context/store";
-import Main from "../Main/Main";
-import SearchAppBar from "./SearchAppBar";
 import { isAuthenticated } from "../../util/authToken";
+import PersistentDrawer from "../Main/drawer/PersistentDrawer";
+import { mainBoxStyle } from "../Main/useMainStyles";
+import SearchAppBar from "./SearchAppBar";
+import useAppLayoutHook from "./useAppLayoutHook";
 
 const AppLayout = () => {
-  const navigate = useNavigate();
-  const [userProjects, setUserProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState({});
-  const [userTask, setUserTask] = useState([]);
-  const [isOpen, setIsOpen] = useState(true);
-
-  const toggleDrawer = useCallback(() => {
-    setIsOpen((prevState) => !prevState);
-  }, [setIsOpen]);
-
-  React.useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      navigate("/login");
-    }
-    if (selectedProject.project_id) {
-      navigate(`/project/${selectedProject.project_id}`);
-    }
-  }, [selectedProject.project_id, navigate]);
-
-  React.useEffect(() => {
-    if (userProjects?.length) {
-      setSelectedProject(userProjects[0]);
-    }
-  }, [userProjects, setSelectedProject]);
-
-  const appContextValue = React.useMemo(
-    () => ({
-      userProjects,
-      setUserProjects,
-      userTask,
-      setUserTask,
-      isOpen,
-      toggleDrawer,
-      setSelectedProject,
-      selectedProject,
-    }),
-    [
-      userProjects,
-      setUserProjects,
-      userTask,
-      setUserTask,
-      isOpen,
-      toggleDrawer,
-      setSelectedProject,
-      selectedProject,
-    ]
-  );
-
+  const appLayoutHook = useAppLayoutHook();
   if (!isAuthenticated()) {
-    <Navigate to="/login" />;
+    return <Navigate to="/login" />;
   }
   return (
-    <AppContext.Provider value={appContextValue}>
+    <AppContext.Provider value={appLayoutHook.appContextValue}>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-        <SearchAppBar onMenuClick={() => toggleDrawer()} />
-        <Main isOpen={isOpen} toggleDrawer={toggleDrawer} />
+        <SearchAppBar onMenuClick={() => appLayoutHook.toggleDrawer()} />
+        <Box sx={mainBoxStyle}>
+          <PersistentDrawer
+            isOpen={appLayoutHook.isOpen}
+            toggleDrawer={appLayoutHook.toggleDrawer}
+          />
+        </Box>
       </Box>
     </AppContext.Provider>
   );
