@@ -3,9 +3,9 @@ import { Box, Button } from "@mui/material";
 import * as React from "react";
 import BoardView from "../../../../component/boardview/BoardView";
 import theme from "../../../../theme/theme";
-import themeColors from "../../../../constants/ThemeColors";
+import themeColors from "../../../../theme/ThemeColors";
 
-const SubHeader = ({ projectName }) => {
+const SubHeader = () => {
   const [isModalOpen, toggleModal] = React.useState(false);
 
   return (
@@ -56,11 +56,7 @@ const SubHeader = ({ projectName }) => {
         </Box>
       </Box>
       <Box>
-        <BoardView
-          isModalOpen={isModalOpen}
-          toggleModal={toggleModal}
-          projectName={projectName}
-        />
+        <BoardView isModalOpen={isModalOpen} toggleModal={toggleModal} />
       </Box>
     </React.Fragment>
   );

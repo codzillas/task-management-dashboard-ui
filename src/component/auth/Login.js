@@ -1,57 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../constants/Constants";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#1976d2", // Blue color
-    },
-    secondary: {
-      main: "#ffffff", // White color
-    },
-  },
-});
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../../theme/theme";
+import useLoginHook from "./useLoginHook";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setErrorMessage(""); // Clear previous error messages
-
-    try {
-      // API call for login
-      const response = await fetch(
-        `${BASE_URL}/api/auth/login?email=${email}&password=${password}`
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        // Store token in localStorage or context (if needed)
-        localStorage.setItem("token", data.token);
-        // Navigate to home page after successful login
-        navigate("/"); // Adjust this to your home route
-      } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message); // Set the error message to display
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-      setErrorMessage("Login failed. Please try again.");
-    }
-  };
-
-  React.useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/");
-    }
-  }, [localStorage.getItem("token")]);
+  const loginHook = useLoginHook();
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="sm" sx={{ mt: 8 }}>
@@ -69,19 +23,19 @@ const Login = () => {
           <Typography variant="h4" color="primary" gutterBottom>
             Login
           </Typography>
-          {errorMessage && (
+          {loginHook.errorMessage && (
             <Typography variant="body1" color="error" sx={{ mb: 2 }}>
-              {errorMessage}
+              {loginHook.errorMessage}
             </Typography>
           )}
-          <form onSubmit={handleLogin} style={{ width: "100%" }}>
+          <form onSubmit={loginHook.handleLogin} style={{ width: "100%" }}>
             <TextField
               fullWidth
               margin="normal"
               label="Email"
               variant="outlined"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={loginHook.email}
+              onChange={(e) => loginHook.setEmail(e.target.value)}
               required
               type="email"
             />
@@ -90,8 +44,8 @@ const Login = () => {
               margin="normal"
               label="Password"
               variant="outlined"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={loginHook.password}
+              onChange={(e) => loginHook.setPassword(e.target.value)}
               required
               type="password"
             />
