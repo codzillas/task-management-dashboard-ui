@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Navigate, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constants/Constants";
 
 const theme = createTheme({
   palette: {
@@ -46,7 +47,7 @@ const Register = () => {
 
     try {
       // API call to sign up endpoint
-      const response = await fetch("http://localhost:5001/api/auth/signup", {
+      const response = await fetch(`${BASE_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

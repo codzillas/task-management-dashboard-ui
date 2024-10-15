@@ -1,9 +1,10 @@
 import { Box } from "@mui/material";
 import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/store";
 import Main from "../Main/Main";
 import SearchAppBar from "./SearchAppBar";
+import { isAuthenticated } from "../../util/authToken";
 
 const AppLayout = () => {
   const navigate = useNavigate();
@@ -53,6 +54,10 @@ const AppLayout = () => {
       selectedProject,
     ]
   );
+
+  if (!isAuthenticated()) {
+    <Navigate to="/login" />;
+  }
   return (
     <AppContext.Provider value={appContextValue}>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>

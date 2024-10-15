@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constants/Constants";
 
 const theme = createTheme({
   palette: {
@@ -27,7 +28,7 @@ const Login = () => {
     try {
       // API call for login
       const response = await fetch(
-        `http://localhost:5001/api/auth/login?email=${email}&password=${password}`
+        `${BASE_URL}/api/auth/login?email=${email}&password=${password}`
       );
 
       if (response.ok) {

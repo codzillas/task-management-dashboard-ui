@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+export const BASE_URL = "http://localhost:5001";
 export const POPOVERCONTENT__HEADER = {
   project: "Project",
   task: "Tasks",
