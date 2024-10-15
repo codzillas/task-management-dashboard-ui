@@ -6,22 +6,28 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { DragDropContext } from "react-beautiful-dnd";
 import { AppContext } from "../../context/store";
 import useGetProject from "../../hooks/project/useGetProject";
 import useCreateSection from "../../hooks/section/useCreateSection";
+import useGetTasks from "../../hooks/task/useGetTasks";
+import useUpdateTask from "../../hooks/task/useUpdateTask";
 import CreateTaskPopup from "../projects/CreateTaskPopup";
 import { boardViewStyles } from "./BoardViewStyles";
 import Section from "./Section";
 
-function BoardView({ isModalOpen, toggleModal, projectName }) {
+function BoardView({ isModalOpen, toggleModal }) {
   const scrollContainerRef = useRef(null);
   const ref = useRef(null);
   const { selectedProject } = useContext(AppContext);
   const [addSectionClicked, setAddSectionClicked] = useState(false);
   const [projectDetails, setProjectDetails] = useState(null);
   const [newSectionCreated, setNewSectionCreated] = useState(false);
+  const [tasks, setTasks] = React.useState([]); // Array to hold multiple tasks
 
   const [sectionName, setSectionName] = useState("");
+  const { apiData: updatesTask, updateTask } = useUpdateTask();
+  const { apiData: getTasksApiData, getTasks } = useGetTasks();
   const { apiData, getProject } = useGetProject({
     projectId: selectedProject.project_id,
   });
@@ -99,17 +105,47 @@ function BoardView({ isModalOpen, toggleModal, projectName }) {
     };
   }, [handleClickOutside]);
 
+  React.useEffect(() => {
+    getTasks();
+  }, [updatesTask?.section_id]);
+
+  React.useEffect(() => {
+    setTasks(getTasksApiData);
+  }, [getTasksApiData]);
+
   useEffect(() => {
     getProjectDetails();
   }, [selectedProject.project_id, getProject]);
+
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+    const { source, destination } = result;
+    updateTask({
+      taskId: tasks?.filter((t) => t.section_id === source.droppableId)[
+        source.index
+      ].task_id,
+      sectionId: destination.droppableId,
+    });
+  };
 
   return (
     <>
       <Box sx={mainSectionContainer}>
         <Box sx={mainSectionContainer__Inner} ref={scrollContainerRef}>
-          {projectDetails?.sections?.map((section) => (
-            <Section key={section.section_id} section={section} />
-          ))}
+          <DragDropContext
+            onDragEnd={(result) => {
+              handleOnDragEnd(result, tasks, setTasks);
+            }}
+          >
+            {projectDetails?.sections?.map((section) => (
+              <Section
+                key={section.section_id}
+                section={section}
+                tasks={tasks}
+                setTasks={setTasks}
+              />
+            ))}
+          </DragDropContext>
           <Box sx={mainSectionContainer__Inner_Inner}>
             {addSectionClicked ? (
               <TextField
@@ -177,7 +213,7 @@ function BoardView({ isModalOpen, toggleModal, projectName }) {
           >
             <CreateTaskPopup
               toggleModal={toggleModal}
-              defaultProjectDetails={{ project_name: projectName }}
+              defaultProjectDetails={projectDetails}
             />
           </Box>
         </Box>

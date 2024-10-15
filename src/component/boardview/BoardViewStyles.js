@@ -1,4 +1,4 @@
-import themeColors from "../../constants/ThemeColors";
+import themeColors from "../../theme/ThemeColors";
 import theme from "../../theme/theme";
 
 export function boardViewStyles() {

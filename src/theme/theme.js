@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import themeColors from "../constants/ThemeColors";
+import themeColors from "./ThemeColors";
 
 // Creating MUI Theme using the colors from themeColors.js
 const theme = createTheme({
