@@ -62,7 +62,6 @@ const Register = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("User registered successfully:", data);
         alert("User registered successfully.");
         setRedirect(true); // Redirect to the login page
       } else {
