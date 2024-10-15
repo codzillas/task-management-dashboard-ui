@@ -1,10 +1,11 @@
 import React from "react";
 import fetchDataFromAPI from "../../util/fetchDataFromAPI";
+import { BASE_URL } from "../../constants/Constants";
 
 const useGetTasks = () => {
   const [apiData, setApiData] = React.useState(null);
   const getTasks = React.useCallback(async () => {
-    const apiUrl = "http://localhost:5001/api/tasks";
+    const apiUrl = `${BASE_URL}/api/tasks`;
     const data = await fetchDataFromAPI(apiUrl);
     if (data) {
       setApiData(data);

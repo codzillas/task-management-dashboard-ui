@@ -31,7 +31,9 @@ export default function Section({ section }) {
   }, [getTasksApiData]);
 
   React.useEffect(() => {
-    scrollToBottom();
+    if (tasks?.filter((t) => t.section_id === section.section_id).length >= 3) {
+      scrollToBottom();
+    }
   }, [tasks]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,7 +44,6 @@ export default function Section({ section }) {
   };
 
   const handleMenuItemClick = (action) => {
-    console.log(action);
     handleClose();
   };
 
@@ -56,7 +57,6 @@ export default function Section({ section }) {
   };
 
   const handleAddTask = (sectionId) => {
-    console.log("taskName", taskName);
     if (taskName.trim() === "") return; // Prevent adding empty tasks
     setTasks((prevTasks) => [
       ...prevTasks,
@@ -82,7 +82,6 @@ export default function Section({ section }) {
     }
   };
 
-  console.log("tasks", tasks);
   return (
     <Box key={section.section_id} sx={mainSectionContainer__Inner_Inner}>
       <Box sx={sectionHeader}>
@@ -91,7 +90,8 @@ export default function Section({ section }) {
             {section.name}
           </Typography>
           <Typography sx={{ mx: 1, fontSize: 16 }} variant="h3">
-            {tasks?.length} {/* Display the number of tasks */}
+            {tasks?.filter((t) => t.section_id === section.section_id).length}
+            {/* Display the number of tasks */}
           </Typography>
         </Box>
         <div>

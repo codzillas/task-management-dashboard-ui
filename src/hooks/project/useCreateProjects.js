@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { BASE_URL } from "../../constants/Constants";
 
 const usePostProject = () => {
   const [loading, setLoading] = useState(false);
@@ -9,7 +10,7 @@ const usePostProject = () => {
     setAlert({ message: "", severity: "" }); // Clear previous alerts
 
     try {
-      const response = await fetch("http://localhost:5001/api/projects", {
+      const response = await fetch(`${BASE_URL}/api/projects`,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",
